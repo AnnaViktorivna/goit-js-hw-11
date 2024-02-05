@@ -5,20 +5,39 @@ import 'simplelightbox/dist/simple-lightbox.min.css';
 
 const BASE_URL = 'https://pixabay.com/api/';
 
+const gallerySimpleLightbox = new SimpleLightbox('.gallery a.link-item', {
+  /* options */
+  navText: ['←', '→'],
+  closeText: '×',
+  enableKeyboard: true,
+  captionsData: 'alt',
+  captionPosition: 'bottom',
+  captionDelay: 250,
+});
+
 const refs = {
   formEl: document.querySelector('.js-search-form[data-id="1"]'),
   listEl: document.querySelector('.gallery'),
 };
+const loader = document.querySelector('.loader');
 
 refs.formEl.addEventListener('submit', formSubmit);
 
 function formSubmit(e) {
   e.preventDefault();
-
   const imgName = e.target.elements.query.value;
+  loader.style.display = 'block';
   clearGallery();
+  searchImage(imgName)
+    .then(renderImage)
+    .then(() => {
+      gallerySimpleLightbox.refresh();
 
-  searchImage(imgName).then(renderImage).catch(handleError);
+      gallerySimpleLightbox.on('error.simplelightbox', function (e) {
+        console.log(e);
+      });
+    })
+    .catch(handleError);
 }
 
 function searchImage(image) {
@@ -41,6 +60,7 @@ function searchImage(image) {
 }
 
 function renderImage(data) {
+  loader.style.display = 'none';
   const markup = imagesTemplate(data.hits);
   refs.listEl.innerHTML = markup;
 }
@@ -59,10 +79,9 @@ function imageTemplate(img) {
     comments,
     downloads,
   } = img;
+  // return `<a href="${largeImageURL}"><img src="${webformatURL}" alt="${tags}" title=""/></a>`;
   return `<li class="gallery-item">
-      <a class="gallery-link" href="${largeImageURL}">
-        <img class="gallery-image" src="${webformatURL}" alt="${tags}" loading="lazy" />
-      </a>
+    <a class="link-item" href="${largeImageURL}"><img class="gallery-img" src="${webformatURL}" alt="${tags}" title=""/></a>
       <div class="info">
         <p class="info-item"><b>Likes</b><br>${likes}</p>
         <p class="info-item"><b>Views</b><br>${views}</p>
@@ -77,6 +96,7 @@ function clearGallery() {
 }
 
 function handleError(error) {
+  loader.style.display = 'none';
   console.error('Error:', error);
   iziToast.error({
     message: 'An error occurred. Please try again later.',
