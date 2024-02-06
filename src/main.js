@@ -5,7 +5,7 @@ import 'simplelightbox/dist/simple-lightbox.min.css';
 
 const BASE_URL = 'https://pixabay.com/api/';
 
-const gallerySimpleLightbox = new SimpleLightbox('.gallery a.link-item', {
+const gallerySimpleLightbox = new SimpleLightbox('.js-gallery a.link-item', {
   /* options */
   navText: ['←', '→'],
   closeText: '×',
@@ -17,16 +17,17 @@ const gallerySimpleLightbox = new SimpleLightbox('.gallery a.link-item', {
 
 const refs = {
   formEl: document.querySelector('.js-search-form[data-id="1"]'),
-  listEl: document.querySelector('.gallery'),
+  listEl: document.querySelector('.js-gallery'),
+  inputEl: document.querySelector('.js-input'),
+  loaderEl: document.querySelector('.js-loader'),
 };
-const loader = document.querySelector('.loader');
 
 refs.formEl.addEventListener('submit', formSubmit);
 
 function formSubmit(e) {
   e.preventDefault();
   const imgName = e.target.elements.query.value;
-  loader.style.display = 'block';
+  refs.loaderEl.style.display = 'block';
   clearGallery();
   searchImage(imgName)
     .then(renderImage)
@@ -37,7 +38,15 @@ function formSubmit(e) {
         console.log(e);
       });
     })
-    .catch(handleError);
+    .catch(handleError)
+    .finally(() => {
+      refs.loaderEl.style.display = 'none';
+      clearInput();
+    });
+}
+
+function clearInput() {
+  refs.inputEl.value = null;
 }
 
 function searchImage(image) {
@@ -60,7 +69,6 @@ function searchImage(image) {
 }
 
 function renderImage(data) {
-  loader.style.display = 'none';
   const markup = imagesTemplate(data.hits);
   refs.listEl.innerHTML = markup;
 }
@@ -79,7 +87,7 @@ function imageTemplate(img) {
     comments,
     downloads,
   } = img;
-  // return `<a href="${largeImageURL}"><img src="${webformatURL}" alt="${tags}" title=""/></a>`;
+
   return `<li class="gallery-item">
     <a class="link-item" href="${largeImageURL}"><img class="gallery-img" src="${webformatURL}" alt="${tags}" title=""/></a>
       <div class="info">
@@ -96,7 +104,6 @@ function clearGallery() {
 }
 
 function handleError(error) {
-  loader.style.display = 'none';
   console.error('Error:', error);
   iziToast.error({
     message: 'An error occurred. Please try again later.',

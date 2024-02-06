@@ -16,7 +16,7 @@
 
   color: #242424;
   background-color: rgba(255, 255, 255, 0.87);
-
+  background-image: url('https://htmlcolorcodes.com/assets/images/html-color-codes-color-tutorials-hero.jpg');
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -25,6 +25,7 @@
 }
 body {
   width: 1128px;
+  margin: 0 auto;
 }
 li {
   list-style: none;
@@ -56,7 +57,7 @@ li {
   padding: 8px 16px;
   width: 91px;
   height: 40px;
-  background: #4e75ff;
+  background-color: palevioletred;
   font-family: var(--font-family);
   font-weight: 500;
   font-size: 16px;
@@ -87,9 +88,10 @@ li {
 }
 
 .gallery-img {
+  width: 100%;
+  object-fit: cover;
   display: block;
   height: 30vh;
-  object-fit: cover;
 
   border-top-right-radius: 20px;
   border-top-left-radius: 20px;
