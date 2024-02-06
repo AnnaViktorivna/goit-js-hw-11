@@ -9,17 +9,17 @@
     <script type="module" crossorigin src="/goit-js-hw-11/commonHelpers.js"></script>
     <link rel="modulepreload" crossorigin href="/goit-js-hw-11/assets/vendor-46aac873.js">
     <link rel="stylesheet" href="/goit-js-hw-11/assets/vendor-eb6030bc.css">
-    <link rel="stylesheet" href="/goit-js-hw-11/assets/index-ddbca0e3.css">
+    <link rel="stylesheet" href="/goit-js-hw-11/assets/index-cc2b4fd9.css">
   </head>
   <body>
-    <h1>Gallery - homework 11 JS</h1>
+    <!-- <h1>Gallery - homework 11 JS</h1> -->
 
     <div class="block">
       <form class="form-inline search-form js-search-form" data-id="1">
         <div class="form-group m-2">
           <input
             type="text"
-            class="form-control"
+            class="js-input form-control"
             name="query"
             placeholder="Search"
           />
@@ -27,9 +27,9 @@
         <button type="submit" class="btn btn-primary">Search</button>
       </form>
     </div>
-    <ul class="gallery"></ul>
+    <ul class="js-gallery gallery"></ul>
 
-    <div class="loader">Loading</div>
+    <div class="loader js-loader" style="display: none">Loading</div>
 
     
   </body>
