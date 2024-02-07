@@ -63,14 +63,25 @@ function searchImage(image) {
     return Promise.reject('Empty search query');
   }
 
-  return fetch(url).then(res => res.json());
-  //   const url = new URL(BASE_URL);
-  //   url.search = new URLSearchParams(params).toString();
+  return fetch(url)
+    .then(res => res.json())
+    .catch(err => {
+      return (err = iziToast.error({
+        message: 'Sorry, something is wrong! :)',
+      }));
+    });
 }
 
 function renderImage(data) {
-  const markup = imagesTemplate(data.hits);
-  refs.listEl.innerHTML = markup;
+  if (data.hits.length === 0) {
+    return iziToast.error({
+      message:
+        'Sorry, there are no images matching your search query. Please try again!',
+    });
+  } else {
+    const markup = imagesTemplate(data.hits);
+    refs.listEl.innerHTML = markup;
+  }
 }
 
 function imagesTemplate(images) {
